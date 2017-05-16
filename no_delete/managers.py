@@ -15,3 +15,6 @@ class NoDeleteManager(models.Manager):
 
     def all_with_deleted(self):
         return NoDeleteQueryset(self.model, using=self._db)
+
+    # Django 1.7 has renamed the Manager.get_query_set to get_queryset
+    get_query_set = get_queryset
