@@ -35,10 +35,12 @@ class ModelTestCase(TestCase):
         post_delete_handler = PostDeleteHandler()
         signals.post_delete.connect(post_delete_handler, weak=False)
 
-        supplier.delete()
-        self.supplier.delete()
-
-        self.assertEqual(post_delete_handler.count, 2)
+        try:
+            supplier.delete()
+            self.supplier.delete()
+            self.assertEqual(post_delete_handler.count, 2)
+        finally:
+            signals.post_delete.disconnect(post_delete_handler)
 
     def test_default(self):
         supplier = Supplier.objects.create(name='test')
