@@ -2,6 +2,8 @@
 
 No Delete Model for django
 
+[![Build Status](https://travis-ci.org/bahattincinic/django-nodelete-model.svg?branch=master)](https://travis-ci.org/bahattincinic/django-nodelete-model)
+
 ## Requirements
 
 * Django >= 1.4
