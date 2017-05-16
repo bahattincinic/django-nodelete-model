@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.db.models import signals
 
 from .models import Supplier
 
@@ -20,6 +21,24 @@ class ModelTestCase(TestCase):
                 is_deleted=True,
                 deleted_at__isnull=False).exists()
         )
+
+    def test_signal(self):
+        supplier = Supplier.objects.create(name='test')
+
+        class PostDeleteHandler:
+            def __init__(self):
+                self.count = 0
+
+            def __call__(self, signal, sender, instance, **kwargs):
+                self.count += 1
+
+        post_delete_handler = PostDeleteHandler()
+        signals.post_delete.connect(post_delete_handler, weak=False)
+
+        supplier.delete()
+        self.supplier.delete()
+
+        self.assertEqual(post_delete_handler.count, 2)
 
     def test_default(self):
         supplier = Supplier.objects.create(name='test')
